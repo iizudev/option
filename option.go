@@ -20,7 +20,11 @@ func None[T any]() Option[T] {
 // Value returns a pointer to the inner value of this Option
 // and a bool indicating that the value is present or not.
 func (o *Option[T]) Value() (*T, bool) {
-	return &o.inner, o.isset
+	if o.isset {
+		return &o.inner, true
+	} else {
+		return nil, false
+	}
 }
 
 // IsSome returns true if this Option has a value.
