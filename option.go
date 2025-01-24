@@ -67,3 +67,9 @@ func From[T any](v T, ok bool) Option[T] {
 func FromFunc[T any](f func() (T, bool)) Option[T] {
 	return From(f())
 }
+
+// FromMap returns an option with the value inside m by key or an empty
+// option if the map m does not contain such entry.
+func FromMap[M ~map[K]V, K comparable, V any](m M, key K) Option[V] {
+	return FromFunc(func() (v V, ok bool) { v, ok = m[key]; return })
+}

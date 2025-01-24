@@ -130,3 +130,31 @@ func TestOption(t *testing.T) {
 		})
 	})
 }
+
+func TestFromMap(t *testing.T) {
+	t.Run("existing key", func(t *testing.T) {
+		var (
+			k = time.Now().Unix()
+			v = k / 2
+			m = map[int64]int64{k: v}
+			s = option.FromMap(m, k)
+		)
+		if r, ok := s.Value(); ok {
+			if *r != v {
+				t.Errorf(
+					"Value should have returned %v, but got %v",
+					v, *r,
+				)
+			}
+		} else {
+			t.Error("Value should have returned an actual value, but it acted like the option is empty")
+		}
+	})
+
+	t.Run("fake key", func(t *testing.T) {
+		s := option.FromMap(make(map[any]any), nil)
+		if s.IsNone() != true {
+			t.Error("FromMap should return an empty option for a key that does not exist in the map")
+		}
+	})
+}
