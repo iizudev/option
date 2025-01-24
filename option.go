@@ -1,3 +1,21 @@
+// Package option provides Option struct that acts as a container
+// of an optional value, meaning that value may exist or be omitted.
+//
+// The Option struct is designed to provide a convenient way to handle
+// optional fields in structs without resorting to pointers or magic values.
+//
+// Unlike pointers, Option avoids unnecessary heap allocations in certain
+// scenarios.
+//
+// Unlike magic values (e.g., empty strings), Option explicitly represents
+// the absence of a value.
+//
+// Example use case:
+//
+//	type User struct {
+//	  Name  string
+//	  Email option.Option[string]
+//	}
 package option
 
 // Option is an optional T, that may not contain an actual
@@ -19,6 +37,8 @@ func None[T any]() Option[T] {
 
 // Value returns a pointer to the inner value of this Option
 // and a bool indicating that the value is present or not.
+//
+// If the bool is equal to false, the pointer is nil.
 func (o *Option[T]) Value() (*T, bool) {
 	if o.isset {
 		return &o.inner, true
