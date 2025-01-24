@@ -53,3 +53,17 @@ func (o Option[T]) Or(f func() T) T {
 func (o Option[T]) OrDefault(fallback T) T {
 	return o.Or(func() T { return fallback })
 }
+
+// From returns an option based on input v and ok.
+func From[T any](v T, ok bool) Option[T] {
+	if ok {
+		return Some(v)
+	} else {
+		return None[T]()
+	}
+}
+
+// FromFunc returns an option based on the result of the func f.
+func FromFunc[T any](f func() (T, bool)) Option[T] {
+	return From(f())
+}
